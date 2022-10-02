@@ -1,0 +1,35 @@
+model knapsackGameA
+	uses "mmxprs"
+
+    declarations
+	item_names: set of string !Declare the set of strings describing the items
+	
+	item_values: array(item_names) of real !Declare the array of item values, with string indices
+	item_weights: array(item_names) of real !Declare the array of item weights, with string indic
+	variables: array(item_names) of mpvar !Declare the array of variables, with string indices
+	
+	weight_limit: real !Declare the weight limit val
+    end-declarations
+
+    initializations from "knapsackGameA.dat" ! Initialise values from the specified file
+        item_names item_values item_weights !Initialise these declared items with values from the specified file
+        weight_limit
+    end-initializations
+
+    knapsack_value := sum(item_name in item_names) item_values(item_name) * variables(item_name) !Define objective value
+
+    knapsack_weight :=  sum(item_name in item_names) item_weights(item_name) * variables(item_name) !Define knapsack weight
+    knapsack_weight <= weight_limit !Set the knapsack weight constraint
+    
+    forall(item_name in item_names) variables(item_name) is_binary !Make sure all variables are binary
+    maximize(knapsack_value) !Solve the problem, maximising knapsack value
+
+    writeln("Optimal value of the knapsack: ", getobjval) !Print value of all chosen items
+    writeln("\n")
+    forall(item_name in item_names)
+        if getsol(variables(item_name)) > 0.1 then !If the item has nonzero variable (was chosen)
+            writeln("Including ", item_name) !Print the item name
+        end-if
+    writeln("\n")
+	writeln("Weight of knapsack: ", getsol(knapsack_weight)) !Print the weight of the knapsack
+end-model

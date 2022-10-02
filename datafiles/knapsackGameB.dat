@@ -1,0 +1,96 @@
+! Data file for `knapsackGame*.mos`
+
+item_names: ["bronze_shield" 
+	     "bronze_helmet" 
+	     "silver_sword" 
+	     "iron_cuirass" 
+	     "yew_longbow" 
+	     "birch_arrows" 
+	     "pine_arrows" 
+	     "soul_stones" 
+	     "healing_potions" 
+	     "energy_potions" 
+	     "magic_ring" 
+	     "apples" 
+	     "oranges" 
+	     "smoked_meats" 
+	     "cabbages" 
+	     "cinnamon_rolls"]
+
+weapons: ["bronze_shield" 
+	  "bronze_helmet" 
+	  "silver_sword" 
+	  "iron_cuirass" 
+	  "yew_longbow" 
+	  "birch_arrows" 
+	  "pine_arrows"]
+
+magic_items: ["soul_stones" 
+	      "healing_potions" 
+	      "energy_potions" 
+	      "magic_ring"]
+
+foodstuffs: ["apples" 
+	     "oranges" 
+	     "smoked_meats" 
+	     "cabbages" 
+	     "cinnamon_rolls"]
+
+item_values: [("bronze_shield") 250.0 
+	      ("bronze_helmet") 147.0 
+	      ("silver_sword") 348.0 
+	      ("iron_cuirass") 452.0 
+	      ("yew_longbow") 143.0 
+	      ("birch_arrows") 3.5 
+	      ("pine_arrows") 2.4 
+	      ("soul_stones") 86.3 
+	      ("healing_potions") 43.4 
+	      ("energy_potions") 35.8 
+	      ("magic_ring") 178.0 
+	      ("apples") 0.5 
+	      ("oranges") 0.6 
+	      ("smoked_meats") 5.4 
+	      ("cabbages") 0.3 
+	      ("cinnamon_rolls") 2.1 ]
+
+item_weights: [("bronze_shield") 7.8 
+	      ("bronze_helmet") 6.7 
+	      ("silver_sword") 5.1 
+	      ("iron_cuirass") 14.9 
+	      ("yew_longbow") 3.2 
+	      ("birch_arrows") 0.2 
+	      ("pine_arrows") 0.1 
+	      ("soul_stones") 0.04 
+	      ("healing_potions") 0.1 
+	      ("energy_potions") 0.1 
+	      ("magic_ring") 0.04 
+	      ("apples") 0.1 
+	      ("oranges") 0.1 
+	      ("smoked_meats") 0.3 
+	      ("cabbages") 0.2 
+	      ("cinnamon_rolls") 0.1 ]
+
+item_quantities: [("bronze_shield") 1 
+	      	  ("bronze_helmet") 2 
+	      	  ("silver_sword") 1 
+	      	  ("iron_cuirass") 1 
+	      	  ("yew_longbow") 2 
+	      	  ("birch_arrows") 17 
+	      	  ("pine_arrows") 19 
+	      	  ("soul_stones") 4 
+	      	  ("healing_potions") 3 
+	      	  ("energy_potions") 4 
+	      	  ("magic_ring") 1
+	      	  ("apples") 8
+	      	  ("oranges") 5 
+	      	  ("smoked_meats") 2 
+	      	  ("cabbages") 3
+	      	  ("cinnamon_rolls") 4 ]
+
+weight_limit: 35.0
+
+weaponsmith_gold: 656.0
+
+alchemist_gold: 267.0
+
+merchant_gold: 123.0

@@ -1,0 +1,58 @@
+model knapsackGameB
+	uses "mmxprs"
+
+    declarations
+	item_names: set of string !Declare the set of strings describing the items
+
+	weapons: set of string !Declare the set of strings that are weapons
+	magic_items: set of string !Declare the set of strings that are magical items
+	foodstuffs: set of string !Declare the set of strings that are foodstuffs
+
+	item_values: array(item_names) of real !Declare the array of item values, with string indices
+	item_weights: array(item_names) of real !Declare the array of item weights, with string indices
+	item_quantities: array(item_names) of real !Declare the array of item quantities, with string indices
+	variables: array(item_names) of mpvar !Declare the array of variables, with string indices
+
+	weight_limit: real !Declare the weight limit value
+	weaponsmith_gold: real !Declare the weaponsmith gold value
+	alchemist_gold: real !Declare the alcemist gold value
+	merchant_gold: real !Declare the merchant gold value
+    end-declarations
+
+    initializations from "knapsackGameB.dat" ! Initialise values from the specified file
+        item_names item_values item_weights item_quantities !Initialise these declared items with values from the specified file
+        weapons magic_items foodstuffs
+        weight_limit weaponsmith_gold alchemist_gold merchant_gold
+    end-initializations
+
+    knapsack_value := sum(item_name in item_names) item_values(item_name) * variables(item_name) !Define objective value
+
+    knapsack_weight :=  sum(item_name in item_names) item_weights(item_name) * variables(item_name) !Define knapsack weight
+    knapsack_weight <= weight_limit !Set the knapsack weight constraint
+
+    weapons_value := sum(item_name in weapons) item_values(item_name) * variables(item_name) !Define cumulative value of weapons
+    magic_items_value := sum(item_name in magic_items) item_values(item_name) * variables(item_name) !Define cumulative value of magic items
+    foodstuffs_value := sum(item_name in foodstuffs) item_values(item_name) * variables(item_name) !Define cumulative value of foodstuffs
+
+    weapons_value <= weaponsmith_gold
+    magic_items_value <= alchemist_gold
+    foodstuffs_value <= merchant_gold
+
+    forall(item_name in item_names) variables(item_name) is_integer !Make sure all variables are integer
+    forall(item_name in item_names) variables(item_name) <= item_quantities(item_name) !Make sure all variables are integer
+
+    maximize(knapsack_value) !Solve the problem, maximising knapsack value
+
+    writeln("Optimal value of the knapsack: ", getobjval) !Print value of all chosen items
+    writeln("Value of weapons: ", getsol(weapons_value)) !Print the weapons value
+    writeln("Value of magic items: ", getsol(magic_items_value)) !Print the magic items value
+    writeln("Value of foodstuffs: ", getsol(foodstuffs_value)) !Print the foodstuffs item value
+    writeln("\n")
+    forall(item_name in item_names)
+        if getsol(variables(item_name)) > 0.1 then !If the item has nonzero variable (was chosen)
+            writeln("Including ", getsol(variables(item_name)), " ", item_name, "(s)") !Print the quantity and item name
+        end-if
+    writeln("\n")
+	writeln("Weight of knapsack: ", getsol(knapsack_weight)) !Print the weight of the knapsack
+	
+end-model
