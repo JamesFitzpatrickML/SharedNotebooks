@@ -1,0 +1,40 @@
+model spaceStuff
+  uses "mmxprs"
+
+  declarations
+	    num_edges: integer !Declare the number of edges in the graph
+	    num_paths: integer !Declare the number of simple paths between the source and the target
+	    edge_strings: set of string !Declare the set of edge strings
+  end-declarations
+
+  initializations from "spaceStuff.dat" ! Initialise values from the specified file
+      num_edges num_paths
+  end-initializations
+
+  declarations
+      edge_booleans: array(1..num_paths, edge_strings) of integer !Declare the array of edge_booleans
+      edge_weights: array(edge_strings) of real !Declare the array of edge weights
+      edge_variables: array(edge_strings) of mpvar !Declare the array of edge_variables
+  end-declarations
+
+  initializations from "spaceStuff.dat" ! Initialise values from the specified file
+      edge_booleans edge_strings edge_weights
+  end-initializations
+
+  cut_cost := sum(edge_string in edge_strings) edge_variables(edge_string) * edge_weights(edge_string)
+
+  forall(index in 1..num_paths)
+      sum(edge_string in edge_strings) edge_variables(edge_string) * edge_booleans(index, edge_string) >= 1
+
+  forall(edge_string in edge_strings)
+      edge_variables(edge_string) is_binary
+
+  minimise(cut_cost)
+
+  forall(edge_string in edge_strings)
+      if getsol(edge_variables(edge_string)) > 0.1 then !If the item has nonzero variable (was chosen)
+            writeln("Including ", edge_string) !Print the quantity and item name
+        end-if
+  writeln("Optimal cut weight: ", getobjval)
+
+end-model
