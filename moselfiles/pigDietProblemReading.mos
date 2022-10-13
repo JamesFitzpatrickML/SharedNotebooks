@@ -1,0 +1,35 @@
+model pigDietProblemReading
+  uses "mmxprs"
+
+  declarations
+    feed_names: set of string ! Declare the set of variable name strings
+    nutrient_names: set of string ! Declare the set of constraint name strings
+
+    feed_costs: array(feed_names) of real ! Declare the array of feed costs
+    nutrient_quantities: array(feed_names, nutrient_names) of real ! Declare the array of nutrient quanities per unit feed
+    nutrient_requirements: array(nutrient_names) of real ! Declare the array of nutrient requirements
+
+    variables: array(feed_names) of mpvar ! Declare the array of variables
+    constraints: array(nutrient_names) of linctr ! Declare the array of constraints
+    objective: linctr
+  end-declarations
+
+  initialisations from "pigDietProblem.dat"
+    feed_names nutrient_names ! Initialise the feed names and the nutrient names
+    feed_costs nutrient_quantities nutrient_requirements ! Initialise the arrays containing the problem data
+  end-initialisations
+
+  forall(feed_name in feed_names) variables(feed_name) is_continuous ! Make all variables continuous
+
+  objective := sum(feed_name in feed_names) feed_costs(feed_name) * variables(feed_name) ! Write objectve function
+
+  forall(nutrient_name in nutrient_names) ! For each nutrient
+    constraints(nutrient_name) := sum(feed_name in feed_names) nutrient_quantities(feed_name, nutrient_name) * variables(feed_name) >= nutrient_requirements(nutrient_name) ! Build the nutrient constraint
+
+  minimise(objective) ! Solve the problem, iminimising the objective function
+
+  writeln("Optimal feed cost: ", getobjval) ! Print the optimal feed cost
+
+  forall(feed_name in feed_names) ! For each variable
+    writeln("Quantity of ", feed_name, ": ", getsol(variables(feed_name))) ! Print quantity
+end-model

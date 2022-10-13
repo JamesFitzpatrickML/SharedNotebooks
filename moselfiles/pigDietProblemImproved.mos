@@ -1,0 +1,33 @@
+model pigDietProblemImproved
+  uses "mmxprs"
+  declarations
+    variable_names = ["corn", "barley", "hay"] ! Declare the variable names
+    constraint_names = ["carbohydrates", "protein", "vitamins"] ! Declare the constraint names
+
+    feed_costs: array(1..3) of real ! Declare the feed cost coefficient array
+    nutrient_requirements: array(1..3) of real ! Declare the nutrient requirements array
+    nutrient_quantities: array(1..3, 1..3) of real ! Declare the nutrient quantities array
+    variables: array(1..3) of mpvar ! Declare the variables array
+    constraints: array(1..3) of linctr ! Declare the constraints array
+  end-declarations
+
+  feed_costs :: [0.84, 0.72, 0.60] ! Intiialise the feed cost values
+  nutrient_requirements :: [200, 180, 150] ! Initialise the nutrient requirements values
+  nutrient_quantities :: [90, 20, 40,
+                          30, 80, 60,
+                          10, 20, 60] ! Initialise the nutrient quantities values
+  forall(index in 1..3) variables(index) is_continuous ! Set all of the variables to be continuous
+
+  feed_cost := sum(index in 1..3) variables(index) * feed_costs(index)
+
+  forall(first_index in 1..3) ! For each constraint
+    sum(second_index in 1..3) variables(second_index) * nutrient_quantities(first_index, second_index) >= nutrient_requirements(first_index) ! Build constraint in each variable
+
+  minimise(feed_cost) ! Solve the problem, minimising the feed cost 
+  
+  writeln("Optimal feed cost: ", getobjval) ! Print the optimal feed cost
+  
+  forall(index in 1..3) ! For each variable
+    writeln("Quantity of ", variable_names(index), ": ", getsol(variables(index))) ! Print feed quantities
+  
+end-model
