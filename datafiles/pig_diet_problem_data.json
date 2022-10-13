@@ -1,0 +1,39 @@
+{
+    "feed_names":[
+	"corn",
+	"barley",
+	"hay"
+    ],
+    "nutrient_names":[
+	"carbohydrates",
+	"protein",
+	"vitamins"
+    ],
+    "feed_costs":{
+	"corn":0.84,
+	"barley":0.72,
+	"hay":0.60
+    },
+    "nutrient_quantities" : {
+	"carbohydrates":{
+	    "corn":90,
+	    "barley":20,
+	    "hay":40
+	},
+	"protein":{
+	    "corn":30,
+	    "barley":80,
+	    "hay":60
+	},
+	"vitamins":{
+	    "corn":10,
+	    "barley":20,
+	    "hay":60
+	}
+    },
+    "nutrient_requirements":{
+	"carbohydrates":200,
+	"protein":180,
+	"vitamins":150
+    }
+}

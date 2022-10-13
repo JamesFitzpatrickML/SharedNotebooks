@@ -1,0 +1,31 @@
+! Data file for pigDietProblemReading.mos
+
+feed_names: ['corn'
+             'barley'
+             'hay']
+
+nutrient_names: ["carbohydrate"
+                 "protein"
+                 "vitamin"]
+                 
+nutrient_indices: [("carbohydrate") 1
+                   ("protein") 2
+                   ("vitamin") 3]
+
+feed_costs: [("corn") 0.84
+            ("barley") 0.72
+            ("hay") 0.60]
+
+nutrient_quantities: [("corn" "carbohydrate") 90
+                        ("barley" "carbohydrate") 20
+                        ("hay" "carbohydrate") 40
+                        ("corn" "protein") 30
+                        ("barley" "protein") 80
+                        ("hay" "protein") 60
+                        ("corn" "vitamin") 10
+                        ("barley" "vitamin") 20
+                        ("hay" "vitamin") 60]
+
+nutrient_requirements: [("carbohydrate") 200
+                        ("protein") 180
+                        ("vitamin") 150]
