@@ -1,0 +1,65 @@
+model simpleUnitCommitmentProblem
+
+  uses "mmxprs"
+
+  declarations
+    ! declare the data
+    ramping_costs: array(1..4) of integer
+    operating_costs: array(1..4) of integer
+    generating_costs: array(1..4) of integer
+    generation_caps: array(1..4) of integer
+    previous_activities: array(1..4) of integer
+    expected_demand: real
+    
+    ! declare the variables
+    total_generation_variable: mpvar
+    generation_variables: array(1..4) of mpvar
+    ramping_variables: array(1..4) of mpvar
+    activity_variables: array(1..4) of mpvar
+  end-declarations
+
+  ! Initialise the data
+  expected_demand := 16.5
+  ramping_costs :: [43000, 13000, 21000, 103000]
+  operating_costs :: [2300, 3400, 6700, 1200]
+  generating_costs :: [3658, 4421, 1658, 358]
+  generation_caps :: [4, 7, 4, 9]
+  previous_activities :: [0, 1, 0, 0]
+
+  total_generation_variable is_continuous
+  total_generation_variable <= expected_demand
+  forall(num in 1..4) do ! Setup the variables
+    generation_variables(num) is_continuous
+    generation_variables(num) <= generation_caps(num)
+    ramping_variables(num) is_integer
+    ramping_variables(num) <= 1    
+    activity_variables(num) is_integer
+    activity_variables(num) <= 1    
+  end-do
+
+  forall(num in 1..4) do ! Setup the constraints
+    generation_variables(num) <= activity_variables(num) * generation_caps(num)
+    activity_variables(num) >= 0.5 * (ramping_variables(num) + previous_activities(num))
+    ramping_variables(num) = activity_variables(num) - previous_activities(num)
+  end-do
+  
+  total_generation_variable = expected_demand
+  total_generation_variable = sum(num in 1..4) generation_variables(num)
+
+  ! Setup the objective function
+
+  ramping_cost := sum(num in 1..4) ramping_costs(num) * ramping_variables(num)
+  operating_cost := sum(num in 1..4) operating_costs(num) * activity_variables(num)
+  generating_cost := sum(num in 1..4) generating_costs(num) * generation_variables(num)
+  objective_function := ramping_cost + operating_cost + generating_cost
+
+  minimize(objective_function)
+
+  writeln("Optimal cost: ", getobjval)
+  forall(num in 1..4) do
+    if getsol(activity_variables(num)) > 0.1 then
+       writeln("Station ", num, " is active, generating ", getsol(generation_variables(num)), " kW of electricity.")
+    end-if
+  end-do
+
+end-model
